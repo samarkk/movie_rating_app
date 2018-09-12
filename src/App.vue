@@ -23,6 +23,7 @@
      <v-toolbar color='indigo' fixed app>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Home</v-toolbar-title>
+        <v-spacer></v-spacer>
      </v-toolbar>
      <v-content>
         <v-container fluid>
@@ -39,6 +40,7 @@
 
 <script>
 import './assets/stylesheets/main.css'
+
 export default{
   name: 'App',
   data: () => ({
