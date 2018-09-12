@@ -2,7 +2,7 @@
     <v-form v-model="valid" ref='form' lazy-validation>
         <v-text-field label='Movie Name' v-model='name' :rules='nameRules'></v-text-field>
         <v-text-field name='input-7-1' label='Movie Description' v-model='description' multi-line></v-text-field>
-        <v-select label='Movie Release Year' v-model='release_year' :items='years'></v-select>
+        <v-select label='Movie Release Year' v-model='release_year' :items="years"></v-select>
         <v-text-field label='Movie Genre' v-model='genre'></v-text-field>
         <v-btn @click='submit' :disabled='!valid'>submit</v-btn>
         <v-btn @click='clear'>clear</v-btn>
@@ -19,7 +19,7 @@ export default {
     nameRules: [
       v => !!v || 'Movie name is required'
     ],
-    select: null,
+    select: '2018',
     years: [
       '2018',
       '2017',
@@ -38,3 +38,4 @@ export default {
     }
   }
 }
+</script>
