@@ -22,7 +22,7 @@ app.use(passport.initialize())
 
 // connect to mongodb
 mongoose.connect('mongodb://localhost/mrapp', function () {
-	console.log('Connection has been made')
+	console.log('Connection hua hai')
 })
 .catch(err => {
 	console.error('App starting error ', err.stack)
@@ -30,9 +30,15 @@ mongoose.connect('mongodb://localhost/mrapp', function () {
 })
 
 //Include controllers
+// const useC = require('./controllers/users')
+// useC.controller(app)
+// const movC = require('./controllers/movies')
+// movC.controller(app)
+
 fs.readdirSync('controllers').forEach(function (file) {
 	if(file.substr(-3) == '.js'){
 		const route = require('./controllers/' + file)
+		console.log(file)
 		route.controller(app)
 	}
 })
