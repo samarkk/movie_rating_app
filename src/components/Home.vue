@@ -37,7 +37,7 @@ export default {
       const token = window.localStorage.getItem('auth')
       return axios({
         method: 'get',
-        url: 'http://localhost:8081/movies',
+        url: '/movies',
         headers: {
           Authorization: `JWT ${token}`,
           'Content-Type': 'application/json'

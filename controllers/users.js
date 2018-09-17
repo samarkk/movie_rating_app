@@ -9,47 +9,60 @@ jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt')
 jwtOptions.secretOrKey = 'thisisthesecretkey'
 
 module.exports.controller = (app) => {
+	const LocalStrategy = require('passport-local').Strategy
+	passport.use(new LocalStrategy({
+		usernameField: 'email',
+		passwordField: 'password'
+	}, 
+	function(email, password, done){
+		User.getUserByEmail(email, function(err, user){
+			if(err) { return done(err) }
+			if(!user) { return done(null, false) }
+			User.comparePassword(password, user.password, function(err, isMatch){
+				if(isMatch) { 
+					return done(null, user)
+				} else {
+					return done(null, false)
+				}
+			})
+		})
+	}))
+	
 	app.post('/users/register', (req, res) => {
-		const name = req.body.name
+		const fullname = req.body.fullname
 		const email = req.body.email
 		const password = req.body.password
+		const role = req.body.role || 'user'
 		const newUser = new User({
-			name, email, password
+			email: email,
+			fullname: fullname,
+			role: role,
+			password: password
 		})
-		User.createUser(newUser, (error, user) => {
+		User.createUser(newUser, function(error, user){
 			if(error) { 
 				res.status(422).json({
 					message: 'Something went wrong. Please try after some time'
 				})
 			}
-			res.send(user)
+			res.send({ user: user})
 		})
 	})
 	
-	app.post('/users/login', (req, res) => {
-		if(req.body.email && req.body.password){
-			const email = req.body.email
-			const password = req.body.password
-			console.log('this is app.post in users.js and email is ' + email + ' and password is ' + password)
-			User.getUserByEmail(email, (err, user) => {
-				if( !user ){
-					res.status(404).json({
-						message: 'The user does not exist'
-					})
-				} else {
-					User.comparePassword(password, user.password, (error, isMatch) => {
-						if(error) throw error
-						if(isMatch) {
-							const payload = { id:  user._id }
-							const token = jwt.sign(payload, jwtOptions.secretOrKey)
-							res.json({ message: 'ok', token })
-							console.log('The payload is: ' + payload.id + ' and the token is ' + token)
-						} else {
-							res.status(401).json({ message: 'The password is incorrect'})
-						}
-					})
-				}
-			})
-		}
+	app.post('/users/login', 
+		passport.authenticate('local', { failureRedirect: '/users/login' }),
+		function(req, res) {
+			res.redirect('/')
 	})
+		
+	passport.serializeUser(function(user, done) {
+		done(null, user.id)
+	})
+		
+	passport.deserializeUser(function(id, done){
+			User.findById(id, function(err, user){
+				done(null, user.id)
+		})
+	})
+	
 }
