@@ -62,6 +62,7 @@ app.use(serverStatic(__dirname + '/dist'))
 
 router.get('/api/current_user', isLoggedIn, function(req, res){
 	if(req.user){
+		console.log(JSON.stringify(req.user))
 		res.send({ current_user: req.user})
 	} else {
 		res.status(403).send({ success: false, message: 'Unauthorized'})

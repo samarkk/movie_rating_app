@@ -29,14 +29,12 @@ module.exports.controller = (app) => {
 	}))
 	
 	app.post('/users/register', (req, res) => {
-		const fullname = req.body.fullname
+		const name = req.body.name
 		const email = req.body.email
 		const password = req.body.password
-		const role = req.body.role || 'user'
 		const newUser = new User({
 			email: email,
-			fullname: fullname,
-			role: role,
+			name: name,
 			password: password
 		})
 		User.createUser(newUser, function(error, user){

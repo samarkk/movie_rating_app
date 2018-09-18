@@ -26,7 +26,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class='hidden-sm-and-down'>
             <v-btn id='add_movie_link' flat v-bind:to="{ name: 'AddMovie' }" v-if='current_user'>Add Movie</v-btn>
-            <v-btn id='user_email' flat v-if='current_user'>{{ current_user.email }}</v-btn>
+            <v-btn id='uemail_btn' flat v-if='current_user'>{{ current_user.email }}</v-btn>
             <v-btn id='register_btn' flat v-bind:to="{ name: 'Register' }" v-if='!current_user'>Register</v-btn>
             <v-btn flat v-bind:to="{ name: 'Login' }" v-if='!current_user' v-id='login_btn'>Login</v-btn>
             <v-btn id='logout_btn' flat v-if='current_user' @click='logout'>Logout</v-btn>
@@ -76,6 +76,7 @@ export default{
       })
         .then((response) => {
           this.current_user = response.data.current_user
+          console.log(this.current_user)
         })
         .catch(() => {
         })
